@@ -1,3 +1,4 @@
+"use client"
 import classNames from 'classnames/bind'
 import styles from './UiTagList.module.scss'
 import Tag from '@libs/shared/tag/tag/Tag'

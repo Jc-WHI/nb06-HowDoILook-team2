@@ -13,7 +13,7 @@ type TagProps = {
 }
 
 const Tag = ({ value }: TagProps) => {
-  const { updateQueryURL } = useUpdateQueryURL()
+  const updateQueryURL  = useUpdateQueryURL()
   const searchParams = useSearchParams()
   const selected = searchParams.get('tag') === value || (value === '' && !searchParams.get('tag'))
 
