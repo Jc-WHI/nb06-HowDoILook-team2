@@ -1,3 +1,4 @@
+"use client"
 import classNames from 'classnames/bind'
 import styles from './RankingCard.module.scss'
 import { RankingStyle } from '@services/types'

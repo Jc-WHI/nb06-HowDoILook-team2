@@ -16,7 +16,7 @@ const useUpdateQueryURL = () => {
     return `${pathname}?${params.toString()}`
   }
 
-  return { updateQueryURL }
+  return  updateQueryURL
 
 }
 
