@@ -19,7 +19,7 @@ type PaginationProps = {
 
 const Pagination = ({ currentPage, totalPages, scroll = true, scrollId }: PaginationProps) => {
   const pageArray = getPageArray(currentPage, totalPages)
-  const { updateQueryURL } = useUpdateQueryURL()
+  const  updateQueryURL  = useUpdateQueryURL()
 
   return (
     <div className={cx('container')}>

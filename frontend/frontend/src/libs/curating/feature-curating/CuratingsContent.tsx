@@ -1,3 +1,4 @@
+"use client"
 import { CuratingType } from '@services/types'
 import classNames from 'classnames/bind'
 import styles from './CuratingsContent.module.scss'

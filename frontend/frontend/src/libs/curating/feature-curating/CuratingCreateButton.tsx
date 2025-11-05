@@ -21,7 +21,7 @@ const CuratingCreateButton = ({ styleId, totalItemCount }: CuratingCreateButtonP
   const { renderConfirmModal, openConfirmModal } = useConfirmModal()
 
   const router = useRouter()
-  const { updateQueryURL } = useUpdateQueryURL()
+  const updateQueryURL  = useUpdateQueryURL()
 
   const handleCreateCurating = async (data: CuratingFormInput) => {
     try {

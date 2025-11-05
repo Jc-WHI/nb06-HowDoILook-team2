@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import classNames from 'classnames/bind'
 import styles from './SearchBar.module.scss'
@@ -27,7 +27,7 @@ const SearchBar = ({ initialSearchBy, initialKeyword, inputWidth = '340px', sear
   const { control, handleSubmit } = useForm<{ keywordValue: string }>()
   const [searchByValue, setSearchByValue] = useState(initialSearchBy)
   const router = useRouter()
-  const { updateQueryURL } = useUpdateQueryURL()
+  const updateQueryURL  = useUpdateQueryURL()
 
   const handleSearch = ({ keywordValue }: { keywordValue: string }) => {
     const updates: Record<string, string | number> = {

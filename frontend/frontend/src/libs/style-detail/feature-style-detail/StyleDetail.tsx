@@ -1,3 +1,4 @@
+"use client"
 import getStyleDetail from '../data-access-style-detail/getStyleDetail'
 import StyleDetailLayout from '../ui-style-detail/StyleDetailLayout'
 import StyleImageCarousel from '../ui-style-detail/StyleImageCarousel'
