@@ -14,7 +14,7 @@ type RankingTabProps = {
 }
 
 const RankingTab = ({ currentRankBy }: RankingTabProps) => {
-  const { updateQueryURL } = useUpdateQueryURL()
+  const updateQueryURL  = useUpdateQueryURL()
 
   return (
     <div className={cx('container')}>

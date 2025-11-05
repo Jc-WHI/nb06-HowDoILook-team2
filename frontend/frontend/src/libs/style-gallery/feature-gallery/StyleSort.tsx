@@ -13,7 +13,7 @@ type StyleSortProps = {
 
 const StyleSort = ({ currentSortBy }: StyleSortProps) => {
   const router = useRouter()
-  const { updateQueryURL } = useUpdateQueryURL()
+  const updateQueryURL  = useUpdateQueryURL()
   const [dropdownData, setDropdownData] = useState(currentSortBy)
 
   useEffect(() => {
