@@ -1,9 +1,11 @@
 import express from 'express';
-import { creatReply } from './reply.controller.js';
+import { creatComment } from './comment.controller.js';
 
 const router = express.Router();
 
 router
-  .route('/:curatingId/reply')
+  .route('/:curationId/comments')
   //post
-  .post(creatReply);
+  .post(creatComment);
+
+export default router;

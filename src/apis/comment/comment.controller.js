@@ -1,15 +1,14 @@
 import prisma from '../../prismaClient.js';
 
-const prisma = new PrismaClient();
-
-const creatReply = async (req, res) => {
+//comment create =====
+const creatComment = async (req, res) => {
   try {
-    const { curatingId } = req.params;
-    const { content, password } = req.body;
+    const { curationId } = req.params; //1, 2, 3
+    const { content, password } = req.body; // 내용, 비밀번호비번비번
 
     //curatingData = 특정 curating(Id)이 등록된 스타일 게시글의 정보를 받아온다.
     const curatingData = await prisma.curating.findUnique({
-      where: { id: parseInt(curatingId) },
+      where: { id: parseInt(curationId) },
       include: { style: true },
     });
 
@@ -18,7 +17,7 @@ const creatReply = async (req, res) => {
       return res.status(404).send({ message: '요청하신 데이터를 찾을 수 없습니다 :(' });
     }
 
-    //큐레이팅데이터에.받아온스타일정보중에.패스워드를 styleData에 적용
+    //큐레이팅데이터에.받아온스타일정보중에.패스워드를 stylePassword에 적용
     const stylePassword = curatingData.style.password;
 
     // if 입력된 password === stylePassword(style에 등록된 password) 일치하면
@@ -26,7 +25,7 @@ const creatReply = async (req, res) => {
       const replyData = await prisma.comment.create({
         data: {
           content,
-          curating: { connect: { id: parseInt(curatingId) } },
+          curating: { connect: { id: parseInt(curationId) } },
         },
         select: {
           id: true,
@@ -37,6 +36,7 @@ const creatReply = async (req, res) => {
       });
       res.status(201).json({ message: '답글이 등록되었습니다.', data: replyData });
     } else {
+      //비번이 다르다면
       return res.status(403).json({ message: '스타일 비밀번호와 일치하지 않습니다.' });
     }
   } catch (err) {
@@ -46,4 +46,4 @@ const creatReply = async (req, res) => {
   }
 };
 
-export { creatReply };
+export { creatComment };
