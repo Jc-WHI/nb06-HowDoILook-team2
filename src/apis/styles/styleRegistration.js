@@ -13,7 +13,7 @@ const item={
 			"brand": "string",
 			"price": 1
 		},
-		"outer": {name: "string",
+		outer: {name: "string",
 			brand: "string",
 			price: 0
 },
@@ -42,7 +42,7 @@ const req = await prisma.style.create({
         title:obj.title,
         content:obj.content,
         password:obj.password,
-        categories:item,
+        item:obj.item,
         tag:obj.tag,
         imgUrls:obj.imgUrls,
         
@@ -72,7 +72,5 @@ const object = {
  
 },
    tags:[],
-    imgUrls:[]
+    image:[ ],
 }
-
-let result = await styleRegistration(object);
