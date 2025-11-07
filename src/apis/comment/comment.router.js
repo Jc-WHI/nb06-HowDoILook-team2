@@ -1,11 +1,11 @@
 import express from 'express';
-import { creatComment } from './comment.controller.js';
+import { createComment } from './comment.controller.js';
 
 const router = express.Router();
 
 router
   .route('/:curationId/comments')
   //post
-  .post(creatComment);
+  .post(createComment);
 
 export default router;

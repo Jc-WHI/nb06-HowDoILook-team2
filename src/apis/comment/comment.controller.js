@@ -1,7 +1,7 @@
 import prisma from '../../prismaClient.js';
 
 //comment create =====
-const creatComment = async (req, res) => {
+const createComment = async (req, res) => {
   try {
     const { curationId } = req.params; //1, 2, 3
     const { content, password } = req.body; // 내용, 비밀번호비번비번
@@ -22,6 +22,7 @@ const creatComment = async (req, res) => {
 
     // if 입력된 password === stylePassword(style에 등록된 password) 일치하면
     if (password === stylePassword) {
+      //답글 등록
       const replyData = await prisma.comment.create({
         data: {
           content,
@@ -29,12 +30,20 @@ const creatComment = async (req, res) => {
         },
         select: {
           id: true,
-          nickname: true,
+          curating: { select: { nickname: true } },
           content: true,
           createdAt: true,
         },
       });
-      res.status(201).json({ message: '답글이 등록되었습니다.', data: replyData });
+
+      //명세서에 맞게 순서 조정
+      const responseData = {
+        id: replyData.id,
+        nickname: replyData.curating.nickname,
+        content: replyData.content,
+        createdAt: replyData.createdAt,
+      };
+      return res.status(201).json({ message: '답글이 등록되었습니다.', data: responseData });
     } else {
       //비번이 다르다면
       return res.status(403).json({ message: '스타일 비밀번호와 일치하지 않습니다.' });
@@ -46,4 +55,4 @@ const creatComment = async (req, res) => {
   }
 };
 
-export { creatComment };
+export { createComment };
