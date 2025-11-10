@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import styleGetList from './src/apis/styles/styleGetList.js';
+import styleGetList from './apis/styles/styleGetList.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
