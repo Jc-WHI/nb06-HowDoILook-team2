@@ -1,4 +1,4 @@
-import prisma from "./prismaClient.js";
+import prisma from "../prismaClient.js";
 
 const styleDelete = async (req,res)=>{
     const styleId = parseInt(req.params.styleId);
