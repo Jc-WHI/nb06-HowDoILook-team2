@@ -5,7 +5,6 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 // 이 스키마는 PostgreSQL을 기준으로 작성되었습니다. (tags의 String[] 등)
-
 datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
@@ -14,6 +13,11 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Style {
@@ -34,14 +38,14 @@ model Style {
 model Image {
   id        Int    @id @default(autoincrement())
   imageUrls String
-  style     Style  @relation(fields: [styleId], references: [id])
+  style     Style  @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId   Int
 }
 
 model Tag {
   id      Int    @id @default(autoincrement())
   tags    String
-  style   Style? @relation(fields: [styleId], references: [id])
+  style   Style? @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId Int?
 }
 
@@ -51,7 +55,7 @@ model Item {
   brand      String
   price      Float
   categories Category
-  style      Style    @relation(fields: [styleId], references: [id])
+  style      Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId    Int
 }
 
@@ -75,7 +79,7 @@ model Curating {
   practicality      Int       @default(0)
   costEffectiveness Int       @default(0)
   createdAt         DateTime  @default(now())
-  style             Style?    @relation(fields: [styleId], references: [id])
+  style             Style?    @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId           Int?
   Comment           Comment[]
 }
@@ -84,6 +88,6 @@ model Comment {
   id         Int       @id @default(autoincrement())
   content    String
   createdAt  DateTime  @default(now())
-  curating   Curating? @relation(fields: [curatingId], references: [id])
+  curating   Curating? @relation(fields: [curatingId], references: [id], onDelete: Cascade)
   curatingId Int?      @unique
 }
