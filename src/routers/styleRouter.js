@@ -4,6 +4,6 @@ const styleRouter = express.Router();
 
 styleRouter.get('/styles', styleListGallery);
 styleRouter.get('/ranking', styleListRank);
-styleRouter.get('/style/:styleId', styleGetId);
+styleRouter.get('/styles/:styleId', styleGetId);
 
 export default styleRouter;
