@@ -5,7 +5,7 @@ const styleDelete = async (req,res)=>{
     await prisma.style.delete({
         where:{id:styleId}
     })
-    console.log("sucessfully deleted!");
+    console.log("successfully deleted!");
     res.status(200).send("deleted");
 
 
