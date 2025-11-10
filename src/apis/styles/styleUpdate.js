@@ -1,4 +1,4 @@
-import prisma from "./prismaClient.js";
+import prisma from "../prismaClient.js";
 
 
 const styleUpdate =  async (req,res)=>{
