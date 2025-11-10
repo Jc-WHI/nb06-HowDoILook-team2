@@ -5,6 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 // 이 스키마는 PostgreSQL을 기준으로 작성되었습니다. (tags의 String[] 등)
+
 datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
