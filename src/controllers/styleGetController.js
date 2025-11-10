@@ -73,7 +73,7 @@ export async function styleListGallery(req, res) {
   const totalPages = Math.ceil(totalItemCount / take);
 
   // 만들어진 요리를 약속대로 포장해줘야함 : response 약속대로 포장
-  const formettedData = style.map((s) => {
+  const formattedData = style.map((s) => {
     const categories = {};
     s.item.forEach((i) => {
       categories[i.categories] = {
@@ -100,7 +100,7 @@ export async function styleListGallery(req, res) {
     currentPage: Number(page),
     totalPages: totalPages,
     totalItemCount: totalItemCount,
-    data: formettedData,
+    data: formattedData,
   });
 }
 
@@ -201,7 +201,7 @@ export async function styleListRank(req, res) {
     else stylesWithAvg.sort((a, b) => b.avgScore - a.avgScore);
   }
 
-  const formettedData = stylesWithAvg.map((s, index) => {
+  const formattedData = stylesWithAvg.map((s, index) => {
     const categories = {};
     s.item.forEach((i) => {
       categories[i.categories] = {
@@ -234,6 +234,6 @@ export async function styleListRank(req, res) {
     currentPage: page,
     totalPages: totalPages,
     totalItemCount: totalItemCount,
-    data: formettedData,
+    data: formattedData,
   });
 }
