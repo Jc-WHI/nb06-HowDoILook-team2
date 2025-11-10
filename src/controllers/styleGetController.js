@@ -237,3 +237,78 @@ export async function styleListRank(req, res) {
     data: formattedData,
   });
 }
+export async function styleGetId(req, res) {
+  const id = Number(req.params.styleId);
+
+  await prisma.style.update({
+    where: { id },
+    data: {
+      viewCount: {
+        increment: 1,
+      },
+    },
+  });
+
+  const data = await prisma.style.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      nickname: true,
+      title: true,
+      content: true,
+      viewCount: true,
+      createdAt: true,
+      item: {
+        select: {
+          categories: true,
+          name: true,
+          brand: true,
+          price: true,
+        },
+      },
+      tag: {
+        select: {
+          tags: true,
+        },
+      },
+      image: {
+        select: {
+          imageUrls: true,
+        },
+      },
+      _count: {
+        select: {
+          curating: true,
+        },
+      },
+    },
+  });
+
+  if (!data) {
+    return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
+  }
+
+  const categories = {}; // 스타일 구성 중첩담기
+  data.item.forEach((i) => {
+    categories[i.categories] = {
+      name: i.name,
+      brand: i.brand,
+      price: i.price,
+    };
+  });
+
+  const formattedData = {
+    id: data.id,
+    nickname: data.nickname,
+    title: data.title,
+    content: data.content,
+    viewCount: data.viewCount,
+    curationCount: data._count.curating,
+    createdAt: data.createdAt,
+    categories: categories,
+    tags: data.tag.map((t) => t.tags),
+    imageUrls: data.image.map((i) => i.imageUrls),
+  };
+
+  res.status(200).json({ formattedData });
+}
