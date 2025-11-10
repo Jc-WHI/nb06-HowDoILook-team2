@@ -10,7 +10,7 @@ styleRouter.put('/styles/:styleId',async(req,res)=>{
 
     
     try{
-        const passwordChecking = await prisma.style.findMany({
+        const passwordChecking = await prisma.style.findUnique({
             where:{id:styleId},
         });
         if(!passwordChecking){
@@ -30,7 +30,7 @@ styleRouter.put('/styles/:styleId',async(req,res)=>{
 
             }
             else{
-            res.status(400).json(error);
+        
             console.log("passwords are not same");
             }
     
