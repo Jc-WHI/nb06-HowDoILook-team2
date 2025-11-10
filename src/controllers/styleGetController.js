@@ -240,7 +240,8 @@ export async function styleListRank(req, res) {
 export async function styleGetId(req, res) {
   const id = Number(req.params.styleId);
 
-  await prisma.style.update({
+  await prisma.style.updateMany({
+    // update는 오류가 생김 updateMany시 존재X면 0개 업데이트
     where: { id },
     data: {
       viewCount: {
