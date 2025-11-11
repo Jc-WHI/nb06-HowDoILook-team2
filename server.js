@@ -1,13 +1,11 @@
 import express from 'express';
-import dotenv from 'dotenv';
-import styleGetList from './apis/styles/styleGetList.js';
-dotenv.config();
+import cors from 'cors';
+import { PORT } from './src/lib/constants.js';
 
-const PORT = process.env.PORT || 4000;
 const app = express();
 
 app.use(express.json());
-app.use('/styles', styleGetList);
+app.use(cors());
 
 app.listen(PORT, () => {
   console.log('Server Start');

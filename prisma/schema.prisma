@@ -8,14 +8,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-<<<<<<< HEAD
-generator client {
-  provider = "prisma-client-js"
-=======
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
->>>>>>> origin/develop
 }
 
 model Style {
@@ -36,22 +31,14 @@ model Style {
 model Image {
   id        Int    @id @default(autoincrement())
   imageUrls String
-<<<<<<< HEAD
-  style     Style  @relation(fields: [styleId], references: [id])
-=======
   style     Style  @relation(fields: [styleId], references: [id], onDelete: Cascade)
->>>>>>> origin/develop
   styleId   Int
 }
 
 model Tag {
   id      Int    @id @default(autoincrement())
   tags    String
-<<<<<<< HEAD
-  style   Style? @relation(fields: [styleId], references: [id])
-=======
   style   Style? @relation(fields: [styleId], references: [id], onDelete: Cascade)
->>>>>>> origin/develop
   styleId Int?
 }
 
@@ -61,11 +48,7 @@ model Item {
   brand      String
   price      Float
   categories Category
-<<<<<<< HEAD
-  style      Style    @relation(fields: [styleId], references: [id])
-=======
   style      Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
->>>>>>> origin/develop
   styleId    Int
 }
 
@@ -89,11 +72,7 @@ model Curating {
   practicality      Int       @default(0)
   costEffectiveness Int       @default(0)
   createdAt         DateTime  @default(now())
-<<<<<<< HEAD
-  style             Style?    @relation(fields: [styleId], references: [id])
-=======
   style             Style?    @relation(fields: [styleId], references: [id], onDelete: Cascade)
->>>>>>> origin/develop
   styleId           Int?
   Comment           Comment[]
 }
@@ -102,10 +81,6 @@ model Comment {
   id         Int       @id @default(autoincrement())
   content    String
   createdAt  DateTime  @default(now())
-<<<<<<< HEAD
-  curating   Curating? @relation(fields: [curatingId], references: [id])
-=======
   curating   Curating? @relation(fields: [curatingId], references: [id], onDelete: Cascade)
->>>>>>> origin/develop
   curatingId Int?      @unique
 }

@@ -153,3 +153,6 @@ frontend/frontend/node_modules
 
 # macOS
 .DS_Store
+
+# Local test
+__http__
