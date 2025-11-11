@@ -311,5 +311,5 @@ export async function styleGetId(req, res) {
     imageUrls: data.image.map((i) => i.imageUrls),
   };
 
-  res.status(200).json({ formattedData });
+  res.status(200).json(formattedData);
 }
