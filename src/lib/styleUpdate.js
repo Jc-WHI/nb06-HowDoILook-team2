@@ -1,6 +1,6 @@
 import {prisma} from '../../src/lib/prismaClient.js';
 async function styleUpdate(req,res){
-    const styleId = parseInt(req.params.styleId);
+    const styleId = parseInt(req.params.id);
     const userPassword = req.body.password;
 
     
