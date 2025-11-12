@@ -24,8 +24,10 @@ model Style {
   createdAt     DateTime   @default(now())
   image         Image[]
   tag           Tag[]
-  item          Item[]
+  item          Item[]     @relation("StyleItems")
   curating      Curating[]
+  Tag           Tag[]
+  Item          Item[]
 }
 
 model Image {
@@ -50,6 +52,9 @@ model Item {
   categories Category
   style      Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId    Int
+  Style      Style    @relation(fields: [styleId], references: [id])
+
+  Style Style @relation(fields: [styleId], references: [id])
 }
 
 enum Category {

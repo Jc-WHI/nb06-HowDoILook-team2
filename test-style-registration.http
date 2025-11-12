@@ -1,0 +1,18 @@
+POST http://localhost:3000/style-registration
+Content-Type: application/json
+
+{
+    "nickname": "testUser",
+    "title": "My Style",
+    "content": "This is my style description.",
+    "password": "1234",
+    "categories": {
+        "top": {
+            "name": "top",
+            "brand": "BrandName",
+            "price": 100
+        }
+    },
+    "tag": ["casual", "summer"],
+    "imageUrls": ["image1.jpg", "image2.jpg"]
+}
