@@ -66,6 +66,7 @@ model Curating {
   nickname          String
   content           String
   password          String
+<<<<<<< HEAD
   trendy            Int      @default(0)
   personality       Int      @default(0)
   practicality      Int      @default(0)
@@ -74,6 +75,16 @@ model Curating {
   style             Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId           Int
   comment           Comment?
+=======
+  trendy            Int       @default(0)
+  personality       Int       @default(0)
+  practicality      Int       @default(0)
+  costEffectiveness Int       @default(0)
+  createdAt         DateTime  @default(now())
+  style             Style?    @relation(fields: [styleId], references: [id], onDelete: Cascade)
+  styleId           Int?
+  comment           Comment[]
+>>>>>>> 0ffccde (🚀 feat(prisma): add seed.js mock.js 그리고 스키마 최신화)
 }
 
 model Comment {
