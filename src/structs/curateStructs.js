@@ -1,11 +1,13 @@
 import * as s from 'superstruct';
 
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/;
+// password: s.pattern(s.string(), PASSWORD_REGEX),
+// const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/;
 // helper(Rating: 큐레이팅 점수 유효성 검사),
 const Rating = s.refine(
   s.number(),
   (value) => Number.isInteger(value) && value >= 0 && value <= 10,
-);
+  'Rating',
+); //세번째 인자 레이팅은 에러 메세지용(디버깅할 때 좋음)
 // helper(Integer = 1보다 큰 정수: 패치 및 삭제 id 유효성검사)
 // 예: coerce를 이용해 문자열을 숫자로 변환한 후 refine 적용, 이제 문자열 "3"도 Number로 바뀌어 들어감
 const CoercedNumber = s.coerce(s.number(), s.string(), (value) => Number(value));
@@ -19,7 +21,7 @@ export const idStruct = s.object({
 export const createCurateStruct = s.object({
   nickname: s.size(s.string(), 1, 20),
   content: s.size(s.string(), 1, 150),
-  password: s.pattern(s.string(), PASSWORD_REGEX),
+  password: s.size(s.string(), 8, 16), //패스워드 수정 필요 (string 8 ~16) 정규식은 일단 주석 처리
   trendy: Rating,
   personality: Rating,
   practicality: Rating,
@@ -30,5 +32,5 @@ export const putCurateStruct = s.assign(createCurateStruct, idStruct);
 
 export const deleteCurateStruct = s.assign(
   s.partial(idStruct),
-  s.object({ password: s.pattern(s.string(), PASSWORD_REGEX) }),
+  s.object({ password: s.size(s.string(), 8, 16) }), //패스워드 수정 필요
 );
