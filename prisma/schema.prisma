@@ -23,7 +23,7 @@ model Style {
   curationCount Int        @default(0)
   createdAt     DateTime   @default(now())
   image         Image[]
-  tag           Tag[]
+  tag           Tag[]      @relation("StyleTags")
   item          Item[]
   curating      Curating[]
 }
@@ -36,10 +36,9 @@ model Image {
 }
 
 model Tag {
-  id      Int    @id @default(autoincrement())
-  tags    String
-  style   Style? @relation(fields: [styleId], references: [id], onDelete: Cascade)
-  styleId Int?
+  id    Int     @id @default(autoincrement())
+  tags  String  @unique
+  style Style[] @relation("StyleTags")
 }
 
 model Item {
@@ -74,7 +73,7 @@ model Curating {
   createdAt         DateTime  @default(now())
   style             Style?    @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId           Int?
-  Comment           Comment[]
+  comment           Comment[]
 }
 
 model Comment {
