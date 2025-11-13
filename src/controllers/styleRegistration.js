@@ -43,7 +43,10 @@ const styleRegistration = async(req,res) =>{
                     }))
                 },
                 tag: {
-                    create: (tag || []).map(tag => ({ tags: tag })) // Use tag consistently
+                    connectOrCreate: (tag || []).map(tag => ({
+                        where:{tags:tag},
+                        create:{tags:tag}
+                     })) // Use tag consistently
                 },
                 image: { // Map imageUrls to imageUrls in the Image model
                     create: (imageUrls || []).map(url => ({ imageUrls: url })) // Use imageUrls consistently

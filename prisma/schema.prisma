@@ -23,11 +23,9 @@ model Style {
   curationCount Int        @default(0)
   createdAt     DateTime   @default(now())
   image         Image[]
-  tag           Tag[]
-  item          Item[]     @relation("StyleItems")
+  tag           Tag[]      @relation("StyleTags")
+  item          Item[]
   curating      Curating[]
-  Tag           Tag[]
-  Item          Item[]
 }
 
 model Image {
@@ -38,10 +36,9 @@ model Image {
 }
 
 model Tag {
-  id      Int    @id @default(autoincrement())
-  tags    String
-  style   Style? @relation(fields: [styleId], references: [id], onDelete: Cascade)
-  styleId Int?
+  id    Int     @id @default(autoincrement())
+  tags  String  @unique
+  style Style[] @relation("StyleTags")
 }
 
 model Item {
@@ -52,9 +49,6 @@ model Item {
   categories Category
   style      Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId    Int
-  Style      Style    @relation(fields: [styleId], references: [id])
-
-  Style Style @relation(fields: [styleId], references: [id])
 }
 
 enum Category {
