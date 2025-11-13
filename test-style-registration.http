@@ -1,5 +1,5 @@
 # Create new style
-POST http://localhost:3000/styles
+POST http://localhost:3000/styles/4
 Content-Type: application/json
 
 {
