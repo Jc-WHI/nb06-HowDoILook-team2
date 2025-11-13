@@ -32,29 +32,3 @@ export const createCurateStruct = s.object({
   practicality: s.optional(Rating),
   costEffectiveness: s.optional(Rating),
 });
-//put은 patch와 다르게 좀 더 엄격해서 rest관점에서 리소스 전체 교체를 의미 가능한 모든 필드를 클라이언트가 보내서 서버가 전체를 덮어쓰는 것을 기대함
-export const updateCurateStruct = s.object({
-  nickname: s.optional(s.size(s.string(), 1, 20)),
-  content: s.optional(s.size(s.string(), 1, 150)),
-  password: s.size(s.string(), 8, 16),
-  trendy: s.optional(Rating),
-  personality: s.optional(Rating),
-  practicality: s.optional(Rating),
-  costEffectiveness: s.optional(Rating),
-});
-
-export const deleteCurateStruct = s.object({ password: s.size(s.string(), 8, 16) });
-//목록 조회할 때 필요할 줄 알았는데 필요없었음
-// export const commnetStruct = s.object({
-//   id: s.optional(Integer),
-//   content: s.coerce(s.size(s.string(), 1, 150), s.union([s.string(), s.number()]), (value) =>
-//     String(value),
-//   ),
-// });
-
-export const pageParamsStruct = s.object({
-  page: s.defaulted(Integer, 1),
-  pageSize: s.defaulted(Integer, 5),
-  searchBy: s.enums(['nickname', 'content']),
-  keyword: s.optional(nonempty(string())),
-});
