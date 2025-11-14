@@ -15,13 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 // New REST-conventional create route
-// app.post('/styles', styleRegistration); // removed
 app.use(styleRegistrationRouter);
-
-// Legacy (kept)
-app.post('/style-registration', styleRegistration);
-
-// Update routes (PUT and PATCH use same controller)
 
 app.listen(PORT, () => {
   console.log('Server Start');

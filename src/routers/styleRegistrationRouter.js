@@ -2,8 +2,8 @@
 import express from 'express';
 import styleRegistration from '../controllers/styleRegistration.js';
 
-const router = express.Router();
+const StyleRegistrationRouter = express.Router();
 
-router.post('/styles', styleRegistration);
+StyleRegistrationRouter.post('/styles', styleRegistration);
 
 export default StyleRegistrationRouter;
