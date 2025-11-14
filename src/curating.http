@@ -1,0 +1,42 @@
+POST http://localhost:3000/styles/1/curations
+Content-Type: application/json
+
+{
+	"nickname": "빙수",
+	"content": "내용입니다",
+	"password": "비밀번호1345",
+	"trendy": 3,
+	"personality": 2,
+	"practicality": 2,
+	"costEffectiveness": 1
+}
+
+###
+PUT http://localhost:3000/curations/2
+Content-Type: application/json
+
+{
+	"nickname": "밍수",
+	"content": "와다다",
+	"password": "비밀번호1345",
+	"trendy": null,
+	"personality": null,
+	"practicality": 6,
+	"costEffectiveness": 1
+}
+
+###
+DELETE http://localhost:3000/curations/1
+Content-Type: application/json
+
+{
+	"password": "비밀번호1345"
+}	
+
+###
+GET http://localhost:3000/styles/1/curations?page=1&pageSize=5
+
+
+###
+GET http://localhost:3000/styles/1/curations?page=1&pageSize=5&searchBy=nickname&keyword=민수
+//키워드 검색 쿼리// ?page=1&pageSize=5&searchBy=nickname&keyword=민수

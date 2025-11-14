@@ -2,10 +2,11 @@ import { create } from 'superstruct';
 import {
   createCurateStruct,
   deleteCurateStruct,
-  idStruct,
+  curationIdStruct,
   pageParamsStruct,
+  styleIdStruct,
   updateCurateStruct,
-} from '../structs/curateStructs';
+} from '../structs/curateStructs.js';
 import NotFoundError from '../lib/error.js';
 import { prisma } from '../lib/prismaClient.js';
 //req.params: 리소스 위치
@@ -13,7 +14,7 @@ import { prisma } from '../lib/prismaClient.js';
 //req.body: 보내는 실제 데이터
 export async function createCurating(req, res) {
   //'style/:styleId' 라우트 경로 설정
-  const { styleId } = create(req.params, idStruct);
+  const { styleId } = create(req.params, styleIdStruct);
   const payload = create(req.body, createCurateStruct);
   // 스타일 존재 확인
   const findStyle = await prisma.style.findUnique({ where: { id: styleId } });
@@ -49,7 +50,7 @@ export async function createCurating(req, res) {
 }
 //=-------------------------------------
 export async function updateCurating(req, res) {
-  const { curationId } = create(req.params, idStruct);
+  const { curationId } = create(req.params, curationIdStruct);
   const payload = create(req.body, updateCurateStruct);
   const findCurate = await prisma.curating.findUnique({ where: { id: curationId } });
   if (!findCurate) {
@@ -62,10 +63,11 @@ export async function updateCurating(req, res) {
     // 점수,텍스트 미전송,null 허용
     nickname: payload.nickname ?? findCurate.nickname,
     content: payload.content ?? findCurate.content,
-    trendy: payload.trendy ?? findCurate.trendy,
-    personality: payload.personality ?? findCurate.personality,
-    practicality: payload.practicality ?? findCurate.practicality,
-    costEffectiveness: payload.costEffectiveness ?? findCurate.costEffectiveness,
+    trendy: payload.trendy == null ? findCurate.trendy : payload.trendy,
+    personality: payload.personality == null ? findCurate.personality : payload.personality,
+    practicality: payload.practicality == null ? findCurate.practicality : payload.practicality,
+    costEffectiveness:
+      payload.costEffectiveness == null ? findCurate.costEffectiveness : payload.costEffectiveness,
   };
   const updated = await prisma.curating.update({
     where: { id: curationId },
@@ -85,13 +87,13 @@ export async function updateCurating(req, res) {
 }
 //-----------------------------------------------
 export async function deleteCurating(req, res) {
-  const { curationId } = create(req.params, idStruct);
-  const payload = create(req.body, deleteCurateStruct);
+  const { curationId } = create(req.params, curationIdStruct);
+  const { password } = create(req.body, deleteCurateStruct);
   const findCurate = await prisma.curating.findUnique({ where: { id: curationId } });
   if (!findCurate) {
     throw new NotFoundError('curating', curationId);
   }
-  if (payload.password !== findCurate.password) {
+  if (password !== findCurate.password) {
     return res.status(403).json({ message: '비밀번호가 틀렸습니다.' });
   }
   await prisma.curating.delete({ where: { id: curationId } });
@@ -99,7 +101,7 @@ export async function deleteCurating(req, res) {
 }
 //---------------------------------------------
 export async function getCuratingList(req, res) {
-  const { styleId } = create(req.params, idStruct);
+  const { styleId } = create(req.params, styleIdStruct);
   const { page, pageSize, searchBy, keyword } = create(req.query, pageParamsStruct);
   const skip = (page - 1) * pageSize;
   const baseWhere = { styleId };
@@ -110,7 +112,7 @@ export async function getCuratingList(req, res) {
     prisma.curating.count({ where }),
     prisma.curating.findMany({
       where,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { id: 'asc' },
       skip,
       take: pageSize,
       select: {
@@ -132,24 +134,27 @@ export async function getCuratingList(req, res) {
     }),
   ]);
   const totalPages = totalItemCount === 0 ? 0 : Math.ceil(totalItemCount / pageSize);
-  const data = rows.map((r) => ({
-    id: r.id,
-    nickname: r.nickname,
-    content: r.content,
-    trendy: r.trendy,
-    personality: r.personality,
-    practicality: r.practicality,
-    costEffectiveness: r.costEffectiveness,
-    createdAt: r.createdAt,
-    comment: r.comment
-      ? {
-          id: r.comment.id,
-          nickname: r.style.nickname,
-          content: r.comment.content,
-          createdAt: r.comment.createdAt,
-        }
-      : {},
-  }));
+  const data = rows.map((r) => {
+    const findComment = r.comment[0]; //해당 변수 없이는 comment부분의 삼항 연산에서의 매핑이 항상 style의 nickname을 반환함 코멘트가 있든 없든// 있으면 0번 인덱스를 반환하는 변수
+    return {
+      id: r.id,
+      nickname: r.nickname,
+      content: r.content,
+      trendy: r.trendy,
+      personality: r.personality,
+      practicality: r.practicality,
+      costEffectiveness: r.costEffectiveness,
+      createdAt: r.createdAt,
+      comment: findComment //r.comment 는 배열, 댓글이 없으면 null이아닌 []빈 배열이고, 빈 배열은 truthy라 nickname: r.style.nickname을 댓글이 있어도, 없어도 반환하게 됨
+        ? {
+            id: findComment.id,
+            nickname: r.style.nickname,
+            content: findComment.content,
+            createdAt: findComment.createdAt,
+          }
+        : {},
+    };
+  });
   if (totalItemCount === 0) {
     return res.status(200).json({ message: '아직 큐레이션이 없어요.' });
   }

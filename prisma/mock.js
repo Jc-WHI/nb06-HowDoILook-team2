@@ -1,0 +1,36 @@
+export const mockStyles = [
+  {
+    nickname: '패션러버',
+    title: '가을 데일리룩 🍁',
+    content: '따뜻한 색감으로 코디했어요!',
+    password: '12341234',
+    categories: {
+      top: { name: '니트 스웨터', brand: 'Uniqlo', price: 39000 },
+      bottom: { name: '데님 팬츠', brand: 'Levi’s', price: 89000 },
+      outer: { name: '트렌치코트', brand: 'Musinsa', price: 129000 },
+      dress: null,
+      shoes: { name: '첼시 부츠', brand: 'Dr. Martens', price: 189000 },
+      bag: { name: '숄더백', brand: 'Guess', price: 59000 },
+      accessory: { name: '실버 이어링', brand: 'Pandora', price: 35000 },
+    },
+    tags: ['가을', '데일리', '심플'],
+    imageUrls: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg'],
+  },
+  {
+    nickname: '스트릿소년',
+    title: '스트릿 감성 룩 😎',
+    content: '오버핏 후드랑 조거팬츠로 꾸안꾸!',
+    password: 'abcd1234',
+    categories: {
+      top: { name: '후드티', brand: 'Nike', price: 69000 },
+      bottom: { name: '조거 팬츠', brand: 'Adidas', price: 59000 },
+      outer: null,
+      dress: null,
+      shoes: { name: '에어포스', brand: 'Nike', price: 129000 },
+      bag: { name: '백팩', brand: 'Supreme', price: 199000 },
+      accessory: { name: '비니', brand: 'Carhartt', price: 35000 },
+    },
+    tags: ['스트릿', '남친룩'],
+    imageUrls: ['https://example.com/street1.jpg', 'https://example.com/street2.jpg'],
+  },
+];

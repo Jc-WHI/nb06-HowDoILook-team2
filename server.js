@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/', curateRouter);
+//aap.use(전역 미들웨어 에러핸들러)
 
 app.listen(PORT, () => {
   console.log('Server Start');

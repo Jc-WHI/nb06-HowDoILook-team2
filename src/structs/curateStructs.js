@@ -5,22 +5,25 @@ import * as s from 'superstruct';
 // helper(Rating: 큐레이팅 점수 유효성 검사),
 const Rating = s.refine(
   s.number(),
-  (value) => Number.isInteger(value) && value >= 0 && value <= 10,
   'Rating',
-); //세번째 인자 레이팅은 에러 메세지용(디버깅할 때 좋음)
+  (value) => Number.isInteger(value) && value >= 0 && value <= 10,
+); //버전 패치로 인해 v2에서는 변수이름이 두번째로 오게됨)
 // helper(Integer = 1보다 큰 정수: 패치 및 삭제 id 유효성검사)
 // 예: coerce(입력값 변환해서 원하는 타입 맞추기) (희망하는 바꿀 형태 스트럭트 - 숫자가 되길 바람, 바꾸고싶은 스트럭트 - 여기선 문자, (값)=> 변환결과)
 // 이용해 문자열을 숫자로 변환한 후 refine 적용, 이제 문자열 "3"도 Number로 바뀌어 들어감
-const CoercedNumber = s.coerce(
-  s.number(),
-  s.union([s.string(), s.number()], (value) => Number(value)),
+const CoercedNumber = s.coerce(s.number(), s.union([s.string(), s.number()]), (value) =>
+  Number(value),
 );
 //refine 추가규칙 붙이기
-const Integer = s.refine(CoercedNumber, (value) => Number.isInteger(value) && value > 0, 'Integer');
+const Integer = s.refine(CoercedNumber, 'Integer', (value) => Number.isInteger(value) && value > 0);
 
 //id스트럭트는 개발자들을 위한 밸리데이션 = 백앤드: DB에 잘못된 값이 들어가는 것을 절대 방지하는 안전 장치, 프론트: 잘못된 요청을 미리 막아주는 역할
-export const idStruct = s.object({
-  id: Integer,
+export const styleIdStruct = s.object({
+  styleId: Integer,
+});
+
+export const curationIdStruct = s.object({
+  curationId: Integer,
 });
 
 export const createCurateStruct = s.object({
@@ -37,10 +40,10 @@ export const updateCurateStruct = s.object({
   nickname: s.optional(s.size(s.string(), 1, 20)),
   content: s.optional(s.size(s.string(), 1, 150)),
   password: s.size(s.string(), 8, 16),
-  trendy: s.optional(Rating),
-  personality: s.optional(Rating),
-  practicality: s.optional(Rating),
-  costEffectiveness: s.optional(Rating),
+  trendy: s.optional(s.nullable(Rating)),
+  personality: s.optional(s.nullable(Rating)),
+  practicality: s.optional(s.nullable(Rating)),
+  costEffectiveness: s.optional(s.nullable(Rating)),
 });
 
 export const deleteCurateStruct = s.object({ password: s.size(s.string(), 8, 16) });
@@ -55,6 +58,6 @@ export const deleteCurateStruct = s.object({ password: s.size(s.string(), 8, 16)
 export const pageParamsStruct = s.object({
   page: s.defaulted(Integer, 1),
   pageSize: s.defaulted(Integer, 5),
-  searchBy: s.enums(['nickname', 'content']),
-  keyword: s.optional(nonempty(string())),
+  searchBy: s.optional(s.enums(['nickname', 'content'])), //키워드 값을 주지 않아도 목록이 검색되게
+  keyword: s.optional(s.string()),
 });
