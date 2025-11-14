@@ -60,9 +60,9 @@ export async function updateCurating(req, res) {
     return res.status(403).json({ message: '비밀번호가 틀렸습니다.' }); //리퀘스트 보낸 비밀번호와 수정할 큐레이팅의 비밀번호 일치 검사
   }
   const data = {
-    // 점수,텍스트 미전송,null 허용
-    nickname: payload.nickname ?? findCurate.nickname,
-    content: payload.content ?? findCurate.content,
+    // null 허용, null입력 시 기존 데이터 사용
+    nickname: payload.nickname == null ? findCurate.nickname : payload.nickname,
+    content: payload.content == null ? findCurate.content : payload.content,
     trendy: payload.trendy == null ? findCurate.trendy : payload.trendy,
     personality: payload.personality == null ? findCurate.personality : payload.personality,
     practicality: payload.practicality == null ? findCurate.practicality : payload.practicality,
@@ -134,27 +134,24 @@ export async function getCuratingList(req, res) {
     }),
   ]);
   const totalPages = totalItemCount === 0 ? 0 : Math.ceil(totalItemCount / pageSize);
-  const data = rows.map((r) => {
-    const findComment = r.comment[0]; //해당 변수 없이는 comment부분의 삼항 연산에서의 매핑이 항상 style의 nickname을 반환함 코멘트가 있든 없든// 있으면 0번 인덱스를 반환하는 변수
-    return {
-      id: r.id,
-      nickname: r.nickname,
-      content: r.content,
-      trendy: r.trendy,
-      personality: r.personality,
-      practicality: r.practicality,
-      costEffectiveness: r.costEffectiveness,
-      createdAt: r.createdAt,
-      comment: findComment //r.comment 는 배열, 댓글이 없으면 null이아닌 []빈 배열이고, 빈 배열은 truthy라 nickname: r.style.nickname을 댓글이 있어도, 없어도 반환하게 됨
-        ? {
-            id: findComment.id,
-            nickname: r.style.nickname,
-            content: findComment.content,
-            createdAt: findComment.createdAt,
-          }
-        : {},
-    };
-  });
+  const data = rows.map((r) => ({
+    id: r.id,
+    nickname: r.nickname,
+    content: r.content,
+    trendy: r.trendy,
+    personality: r.personality,
+    practicality: r.practicality,
+    costEffectiveness: r.costEffectiveness,
+    createdAt: r.createdAt,
+    comment: r.comment
+      ? {
+          id: r.comment.id,
+          nickname: r.style.nickname,
+          content: r.comment.content,
+          createdAt: r.comment.createdAt,
+        }
+      : {},
+  }));
   if (totalItemCount === 0) {
     return res.status(200).json({ message: '아직 큐레이션이 없어요.' });
   }

@@ -55,7 +55,7 @@ CREATE TABLE "Curating" (
     "practicality" INTEGER NOT NULL DEFAULT 0,
     "costEffectiveness" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "styleId" INTEGER,
+    "styleId" INTEGER NOT NULL,
 
     CONSTRAINT "Curating_pkey" PRIMARY KEY ("id")
 );
@@ -65,7 +65,7 @@ CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "curatingId" INTEGER,
+    "curatingId" INTEGER NOT NULL,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );

@@ -2,22 +2,22 @@ POST http://localhost:3000/styles/1/curations
 Content-Type: application/json
 
 {
-	"nickname": "빙수",
+	"nickname": "민수",
 	"content": "내용입니다",
 	"password": "비밀번호1345",
-	"trendy": 3,
-	"personality": 2,
+	"trendy": 5,
+	"personality": 5,
 	"practicality": 2,
 	"costEffectiveness": 1
 }
 
 ###
-PUT http://localhost:3000/curations/2
+PUT http://localhost:3000/curations/3
 Content-Type: application/json
 
 {
 	"nickname": "밍수",
-	"content": "와다다",
+	"content": null,
 	"password": "비밀번호1345",
 	"trendy": null,
 	"personality": null,
