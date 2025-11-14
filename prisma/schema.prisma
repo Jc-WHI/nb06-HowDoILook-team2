@@ -4,79 +4,82 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-// 이 스키마는 PostgreSQL을 기준으로 작성되었습니다. (tags의 String[] 등)
-datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_URL")
+generator client {
+  provider = "prisma-client-js"
 }
 
-enum Category {
-  Top
-  Bottom
-  Outer
-  Onepiece
-  Shoes
-  Bag
-  Accessory
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Style {
   id            Int        @id @default(autoincrement())
-  name          String
+  title         String
   nickname      String
-  description   String
+  content       String
   password      String
+  viewCount     Int        @default(0)
+  curationCount Int        @default(0)
   createdAt     DateTime   @default(now())
-  viewCount     Int
-  curatingCount Int
-  item          Item[]
-  tag           Tag[]
-  curating      Curating[]
   image         Image[]
+  tag           Tag[]      @relation("StyleTags")
+  item          Item[]
+  curating      Curating[]
 }
 
-model Item {
-  id        Int      @id @default(autoincrement())
-  name      String
-  brandName String
-  price     Float
-  type      Category
-  style     Style    @relation(fields: [styleId], references: [id])
+model Image {
+  id        Int    @id @default(autoincrement())
+  imageUrls String
+  style     Style  @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId   Int
 }
 
 model Tag {
-  id      Int    @id @default(autoincrement())
-  tag     String
-  style   Style? @relation(fields: [styleId], references: [id])
-  styleId Int?
+  id    Int     @id @default(autoincrement())
+  tags  String  @unique
+  style Style[] @relation("StyleTags")
 }
 
-model Image {
-  id      Int    @id @default(autoincrement())
-  url     String
-  style   Style  @relation(fields: [styleId], references: [id])
-  styleId Int
+model Item {
+  id         Int      @id @default(autoincrement())
+  name       String
+  brand      String
+  price      Float
+  categories Category
+  style      Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
+  styleId    Int
+}
+
+enum Category {
+  top
+  bottom
+  outer
+  dress
+  shoes
+  bag
+  accessory
 }
 
 model Curating {
-  id            Int       @id @default(autoincrement())
-  trendy        Int
-  individuality Int
-  practicality  Int
-  valueForMoney Int
-  description   String
-  nickname      String
-  password      String
-  style         Style?    @relation(fields: [styleId], references: [id])
-  styleId       Int?
-  comment       Comment[]
+  id                Int      @id @default(autoincrement())
+  nickname          String
+  content           String
+  password          String
+  trendy            Int      @default(0)
+  personality       Int      @default(0)
+  practicality      Int      @default(0)
+  costEffectiveness Int      @default(0)
+  createdAt         DateTime @default(now())
+  style             Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
+  styleId           Int
+  comment           Comment?
 }
 
 model Comment {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   content    String
-  curating   Curating? @relation(fields: [curatingId], references: [id])
-  curatingId Int?      @unique
+  createdAt  DateTime @default(now())
+  curating   Curating @relation(fields: [curatingId], references: [id], onDelete: Cascade)
+  curatingId Int      @unique
 }
