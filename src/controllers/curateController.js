@@ -134,27 +134,24 @@ export async function getCuratingList(req, res) {
     }),
   ]);
   const totalPages = totalItemCount === 0 ? 0 : Math.ceil(totalItemCount / pageSize);
-  const data = rows.map((r) => {
-    const findComment = r.comment[0]; //해당 변수 없이는 comment부분의 삼항 연산에서의 매핑이 항상 style의 nickname을 반환함 코멘트가 있든 없든// 있으면 0번 인덱스를 반환하는 변수
-    return {
-      id: r.id,
-      nickname: r.nickname,
-      content: r.content,
-      trendy: r.trendy,
-      personality: r.personality,
-      practicality: r.practicality,
-      costEffectiveness: r.costEffectiveness,
-      createdAt: r.createdAt,
-      comment: findComment //r.comment 는 배열, 댓글이 없으면 null이아닌 []빈 배열이고, 빈 배열은 truthy라 nickname: r.style.nickname을 댓글이 있어도, 없어도 반환하게 됨
-        ? {
-            id: findComment.id,
-            nickname: r.style.nickname,
-            content: findComment.content,
-            createdAt: findComment.createdAt,
-          }
-        : {},
-    };
-  });
+  const data = rows.map((r) => ({
+    id: r.id,
+    nickname: r.nickname,
+    content: r.content,
+    trendy: r.trendy,
+    personality: r.personality,
+    practicality: r.practicality,
+    costEffectiveness: r.costEffectiveness,
+    createdAt: r.createdAt,
+    comment: r.comment //r.comment 는 배열, 댓글이 없으면 null이아닌 []빈 배열이고, 빈 배열은 truthy라 nickname: r.style.nickname을 댓글이 있어도, 없어도 반환하게 됨
+      ? {
+          id: r.comment.id,
+          nickname: r.style.nickname,
+          content: r.comment.content,
+          createdAt: r.comment.createdAt,
+        }
+      : {},
+  }));
   if (totalItemCount === 0) {
     return res.status(200).json({ message: '아직 큐레이션이 없어요.' });
   }
