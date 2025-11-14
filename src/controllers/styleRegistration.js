@@ -14,6 +14,7 @@ const styleRegistration = async(req,res) =>{
     const categoriesStruct = record(enums(["top", "bottom", "outer", "dress", "shoes", "bag", "accessory"]), categoryAttribute);
 
     const styleInformation = object({
+        id: optional(number()),
         nickname: string(),
         title: string(),
         content: string(),
@@ -63,6 +64,7 @@ const styleRegistration = async(req,res) =>{
         });
 
         const response = {};
+        response.id = parseInt(result.id);
         response.nickname = result.nickname;
         response.title = result.title;
         response.content = result.content;

@@ -2,6 +2,7 @@ POST http://localhost:3000/styles
 Content-Type: application/json
 
 {
+  
   "nickname": "testUser",
   "title": "My Style",
   "content": "This is my style description.",
