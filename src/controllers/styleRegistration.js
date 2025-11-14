@@ -66,15 +66,17 @@ const styleRegistration = async(req,res) =>{
         response.nickname = result.nickname;
         response.title = result.title;
         response.content = result.content;
-        response.password = result.password;
+        response.viewCount= result.viewCount;
+	response.curationCount= result.curationCount
+	response.createdAt= result.createdAt;
     
 
         // Build desired categories structure:
-        // categories: { [categoryKey]: { [object_name]: { name, brand, price } } }
+        // categories: { [categoryKey]: { object_name: { name, brand, price } } }
         const categoriesObj = {};
         (result.item || []).forEach(it => {
             if (!categoriesObj[it.categories]) categoriesObj[it.categories] = {};
-            categoriesObj[it.categories][it.name] = {
+            categoriesObj[it.categories]= {
                 name: it.name,
                 brand: it.brand,
                 price: it.price
