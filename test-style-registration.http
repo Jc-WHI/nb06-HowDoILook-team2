@@ -1,5 +1,5 @@
 # Create new style
-POST http://localhost:3000/styles/4
+POST http://localhost:3000/styles
 Content-Type: application/json
 
 {
@@ -8,52 +8,36 @@ Content-Type: application/json
   "content": "This is my style description.",
   "password": "1234",
   "categories": {
-    "top": {
-      "name": "top",
-      "brand": "BrandName",
-      "price": 100
-    }
+    "top": { "name": "top", "brand": "BrandName", "price": 100 }
   },
   "tags": ["casual", "summer"],
   "imgUrls": ["image1.jpg", "image2.jpg"]
 }
 
-### Update style id=2 (delete one tag and one image, update others)
-PATCH http://localhost:3000/styles/2
+### PUT update style id=2
+PUT http://localhost:3000/styles/1
 Content-Type: application/json
 
 {
   "password": "1234",
   "content": "Updated content for style 2",
   "categories": {
-    "top": {
-      "name": "top",
-      "brand": "UpdatedBrand",
-      "price": 120
-    }
+    "top": { "name": "top", "brand": "UpdatedBrand", "price": 120 }
   },
   "tags": ["casual"],
   "imgUrls": ["image1.jpg"]
 }
 
-### Update style id=3 (delete one tag and one image, add a new image and update categories)
-PATCH http://localhost:3000/style/3
+### PATCH update style id=3
+PATCH http://localhost:3000/styles/2
 Content-Type: application/json
 
 {
   "password": "1234",
   "content": "Updated content for style 3",
   "categories": {
-    "top": {
-      "name": "top",
-      "brand": "AnotherBrand",
-      "price": 150
-    },
-    "bottom": {
-      "name": "jeans",
-      "brand": "DenimCo",
-      "price": 90
-    }
+    "top": { "name": "top", "brand": "AnotherBrand", "price": 150 },
+    "bottom": { "name": "jeans", "brand": "DenimCo", "price": 90 }
   },
   "tags": ["summer"],
   "imgUrls": ["image2.jpg", "image3.jpg"]
