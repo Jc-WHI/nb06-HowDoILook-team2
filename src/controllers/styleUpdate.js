@@ -16,7 +16,7 @@ async function styleUpdate(req, res, next) {
     req.body.styleId = styleId; // for schemas expecting "styleId"
     if (req.body.id === undefined) req.body.id = styleId; // backward compatibility
 
-    const {id, title, content, password, categories, tags, imgUrls} = req.body;
+    const { title, content, password, categories, tags, imgUrls } = req.body;
     const data = {};
     if (title) data.title = title;
     if (content) data.content = content;
