@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/curations/1
+DELETE http://localhost:3000/curations/5
 Content-Type: application/json
 
 {
@@ -34,7 +34,7 @@ Content-Type: application/json
 }	
 
 ###
-GET http://localhost:3000/styles/1/curations?page=1&pageSize=5
+GET http://localhost:3000/styles/1/curations?page=1&pageSize=4
 
 
 ###

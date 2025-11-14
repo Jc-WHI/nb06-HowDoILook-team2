@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/Jc-WHI/nb06-HowDoILook-team2#readme",
   "dependencies": {
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "^6.19.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
@@ -32,6 +32,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.10",
-    "prisma": "^5.22.0"
+    "prisma": "^6.19.0"
   }
 }
