@@ -37,8 +37,8 @@ export const createCurateStruct = s.object({
 });
 //put은 patch와 다르게 좀 더 엄격해서 rest관점에서 리소스 전체 교체를 의미 가능한 모든 필드를 클라이언트가 보내서 서버가 전체를 덮어쓰는 것을 기대함
 export const updateCurateStruct = s.object({
-  nickname: s.optional(s.nullable(s.size(s.string(), 1, 20))),
-  content: s.optional(s.nullable(s.size(s.string(), 1, 150))),
+  nickname: s.optional(s.size(s.string(), 1, 20)),
+  content: s.optional(s.size(s.string(), 1, 150)),
   password: s.size(s.string(), 8, 16),
   trendy: s.optional(s.nullable(Rating)),
   personality: s.optional(s.nullable(Rating)),
