@@ -9,7 +9,7 @@ Content-Type: application/json
   "categories": {
     "top": { "name": "top", "brand": "BrandName", "price": 100 }
   },
-  "tags": ["casual", "summer"],
+  "tag": ["casual", "summer"],
   "imgUrls": ["image1.jpg", "image2.jpg"]
 }
 

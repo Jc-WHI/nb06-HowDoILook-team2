@@ -3,8 +3,11 @@ import {assert, string, object, array, enums, number, record, optional} from 'su
 
 //스타일 등록 매서드 
 const styleRegistration = async(req,res) =>{
-    const {nickname, title, content, password, categories, tag, imageUrls} = req.body; // Renamed tags to tag
-    const data = {nickname, title, content, password, categories, tag, imageUrls}; // Use tag here
+    // Add alternative field names
+    const {nickname, title, content, password, categories, tags, tag, imageUrls, imgUrls} = req.body;
+    const reqTags = tags ?? tag ?? [];
+    const reqImageUrls = imageUrls ?? imgUrls ?? [];
+    const data = {nickname, title, content, password, categories, tags: reqTags, imageUrls: reqImageUrls};
     const stringArray = array(string());
     const category = enums(["top","bottom","outer","dress","shoes","bag","accessory"]);
     const categoryAttribute = object({ name: string(), brand: string(), price: number() });
@@ -16,7 +19,7 @@ const styleRegistration = async(req,res) =>{
         content: string(),
         password: string(),
         categories: categoriesStruct,
-        tag: optional(stringArray), // Use tag consistently
+        tags: optional(stringArray), // Use tag consistently
         imageUrls: optional(stringArray) // Use optional helper
     });
 
@@ -43,17 +46,49 @@ const styleRegistration = async(req,res) =>{
                     }))
                 },
                 tag: {
-                    connectOrCreate: (tag || []).map(tag => ({
-                        where:{tags:tag},
-                        create:{tags:tag}
-                     })) // Use tag consistently
+                    connectOrCreate: (reqTags || []).map(t => ({
+                        where:{tags:t},
+                        create:{tags:t}
+                    }))
                 },
                 image: { // Map imageUrls to imageUrls in the Image model
-                    create: (imageUrls || []).map(url => ({ imageUrls: url })) // Use imageUrls consistently
+                    create: (reqImageUrls || []).map(url => ({ imageUrls: url }))
                 }
+            },
+            include:{
+                item:true,
+                tag:true,
+                image:true
             }
         });
-        res.status(200).json(result); 
+
+        const response = {};
+        response.nickname = result.nickname;
+        response.title = result.title;
+        response.content = result.content;
+        response.password = result.password;
+    
+
+        // Build desired categories structure:
+        // categories: { [categoryKey]: { [object_name]: { name, brand, price } } }
+        const categoriesObj = {};
+        (result.item || []).forEach(it => {
+            if (!categoriesObj[it.categories]) categoriesObj[it.categories] = {};
+            categoriesObj[it.categories][it.name] = {
+                name: it.name,
+                brand: it.brand,
+                price: it.price
+            };
+        });
+        response.categories = categoriesObj;
+
+        // Ensure tags is a string[] and not undefined
+        response.tag = (result.tag || []).map(t => t.tags);
+
+        // Ensure imageUrls is a string[] and not undefined
+        response.imgUrls = (result.image|| []).map(img => img.imageUrls);
+
+        res.status(200).json(response); 
     } catch (error) {
         console.error(error);
         res.status(500).send("스타일 등록 중 오류가 발생했습니다.");

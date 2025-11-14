@@ -17,7 +17,7 @@ model Style {
   curationCount Int        @default(0)
   createdAt     DateTime   @default(now())
   image         Image[]
-  tag           Tag[]
+  tag           Tag[]      @relation("StyleTags")
   item          Item[]
   curating      Curating[]
 }
@@ -30,10 +30,9 @@ model Image {
 }
 
 model Tag {
-  id      Int    @id @default(autoincrement())
-  tags    String
-  style   Style? @relation(fields: [styleId], references: [id], onDelete: Cascade)
-  styleId Int?
+  id    Int     @id @default(autoincrement())
+  tags  String  @unique
+  style Style[] @relation("StyleTags")
 }
 
 model Item {
@@ -57,24 +56,24 @@ enum Category {
 }
 
 model Curating {
-  id                Int       @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   nickname          String
   content           String
   password          String
-  trendy            Int       @default(0)
-  personality       Int       @default(0)
-  practicality      Int       @default(0)
-  costEffectiveness Int       @default(0)
-  createdAt         DateTime  @default(now())
-  style             Style?    @relation(fields: [styleId], references: [id], onDelete: Cascade)
-  styleId           Int?
-  Comment           Comment[]
+  trendy            Int      @default(0)
+  personality       Int      @default(0)
+  practicality      Int      @default(0)
+  costEffectiveness Int      @default(0)
+  createdAt         DateTime @default(now())
+  style             Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
+  styleId           Int
+  Comment           Comment?
 }
 
 model Comment {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   content    String
-  createdAt  DateTime  @default(now())
-  curating   Curating? @relation(fields: [curatingId], references: [id], onDelete: Cascade)
-  curatingId Int?      @unique
+  createdAt  DateTime @default(now())
+  curating   Curating @relation(fields: [curatingId], references: [id], onDelete: Cascade)
+  curatingId Int      @unique
 }
