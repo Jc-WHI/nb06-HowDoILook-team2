@@ -16,7 +16,7 @@ PUT http://localhost:3000/curations/3
 Content-Type: application/json
 
 {
-	"nickname": "밍수",
+	"nickname": "ㄹ",
 	"content": null,
 	"password": "비밀번호1345",
 	"trendy": null,
