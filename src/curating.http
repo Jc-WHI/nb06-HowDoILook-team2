@@ -12,13 +12,13 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3000/curations/3
+PUT http://localhost:3000/curations/533
 Content-Type: application/json
 
 {
 	"nickname": "ㄹ",
-	"content": null,
-	"password": "비밀번호1345",
+	"content": "2",
+	"password": "비밀번호11345",
 	"trendy": null,
 	"personality": null,
 	"practicality": 6,
@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/curations/5
+DELETE http://localhost:3000/curations/122
 Content-Type: application/json
 
 {
@@ -38,5 +38,5 @@ GET http://localhost:3000/styles/1/curations?page=1&pageSize=4
 
 
 ###
-GET http://localhost:3000/styles/1/curations?page=1&pageSize=5&searchBy=nickname&keyword=민수
+GET http://localhost:3000/styles/1/curations?page=100&pageSize=5&searchBy=nickname&keyword=민수
 //키워드 검색 쿼리// ?page=1&pageSize=5&searchBy=nickname&keyword=민수

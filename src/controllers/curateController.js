@@ -7,20 +7,15 @@ import {
   styleIdStruct,
   updateCurateStruct,
 } from '../structs/curateStructs.js';
-import NotFoundError from '../lib/error.js';
+import { ForbiddenError, BadRequestError } from '../lib/error.js';
 import { prisma } from '../lib/prismaClient.js';
 //req.params: 리소스 위치
 //req.query: 필터링 / 페이지네이션
 //req.body: 보내는 실제 데이터
 export async function createCurating(req, res) {
-  //'style/:styleId' 라우트 경로 설정
   const { styleId } = create(req.params, styleIdStruct);
   const payload = create(req.body, createCurateStruct);
-  // 스타일 존재 확인
-  const findStyle = await prisma.style.findUnique({ where: { id: styleId } });
-  if (!findStyle) {
-    throw new NotFoundError('style', styleId);
-  }
+  await prisma.style.findUniqueOrThrow({ where: { id: styleId } });
   const created = await prisma.curating.create({
     data: {
       nickname: payload.nickname,
@@ -43,21 +38,17 @@ export async function createCurating(req, res) {
       practicality: true,
       costEffectiveness: true,
       createdAt: true,
-      // 반환할 필드만 나열 (style, styleId 제외)
     },
   });
   return res.status(201).json(created);
 }
 //=-------------------------------------
-export async function updateCurating(req, res) {
+export async function updateCurating(req, res, next) {
   const { curationId } = create(req.params, curationIdStruct);
   const payload = create(req.body, updateCurateStruct);
-  const findCurate = await prisma.curating.findUnique({ where: { id: curationId } });
-  if (!findCurate) {
-    throw new NotFoundError('curating', curationId);
-  }
+  const findCurate = await prisma.curating.findUniqueOrThrow({ where: { id: curationId } });
   if (payload.password !== findCurate.password) {
-    return res.status(403).json({ message: '비밀번호가 틀렸습니다.' }); //리퀘스트 보낸 비밀번호와 수정할 큐레이팅의 비밀번호 일치 검사
+    return next(new ForbiddenError()); //리퀘스트 보낸 비밀번호와 수정할 큐레이팅의 비밀번호 일치 검사
   }
   const data = {
     // null 허용, null입력 시 기존 데이터 사용
@@ -86,21 +77,18 @@ export async function updateCurating(req, res) {
   return res.status(200).json(updated);
 }
 //-----------------------------------------------
-export async function deleteCurating(req, res) {
+export async function deleteCurating(req, res, next) {
   const { curationId } = create(req.params, curationIdStruct);
   const { password } = create(req.body, deleteCurateStruct);
-  const findCurate = await prisma.curating.findUnique({ where: { id: curationId } });
-  if (!findCurate) {
-    throw new NotFoundError('curating', curationId);
-  }
+  const findCurate = await prisma.curating.findUniqueOrThrow({ where: { id: curationId } });
   if (password !== findCurate.password) {
-    return res.status(403).json({ message: '비밀번호가 틀렸습니다.' });
+    return next(new ForbiddenError());
   }
   await prisma.curating.delete({ where: { id: curationId } });
   return res.status(200).json({ message: '큐레이팅 삭제 성공' });
 }
 //---------------------------------------------
-export async function getCuratingList(req, res) {
+export async function getCuratingList(req, res, next) {
   const { styleId } = create(req.params, styleIdStruct);
   const { page, pageSize, searchBy, keyword } = create(req.query, pageParamsStruct);
   const skip = (page - 1) * pageSize;
@@ -134,6 +122,12 @@ export async function getCuratingList(req, res) {
     }),
   ]);
   const totalPages = totalItemCount === 0 ? 0 : Math.ceil(totalItemCount / pageSize);
+  if (totalItemCount === 0) {
+    return res.status(200).json({ message: '아직 큐레이션이 없어요.' });
+  }
+  if (page > totalPages) {
+    return next(new BadRequestError());
+  }
   const data = rows.map((r) => ({
     id: r.id,
     nickname: r.nickname,
@@ -152,9 +146,6 @@ export async function getCuratingList(req, res) {
         }
       : {},
   }));
-  if (totalItemCount === 0) {
-    return res.status(200).json({ message: '아직 큐레이션이 없어요.' });
-  }
   return res.status(200).json({
     currentPage: page,
     totalPages,
