@@ -9,9 +9,9 @@ import {
 
 const curateRouter = express.Router();
 
-curateRouter.post('/styles/:styleId/curations', createCurating);
-curateRouter.get('/styles/:styleId/curations', getCuratingList);
+curateRouter.post('/styles/:styleId/curations', withAsync(createCurating));
+curateRouter.get('/styles/:styleId/curations', withAsync(getCuratingList));
 curateRouter.put('/curations/:curationId', withAsync(updateCurating));
-curateRouter.delete('/curations/:curationId', deleteCurating);
+curateRouter.delete('/curations/:curationId', withAsync(deleteCurating));
 
 export default curateRouter;
