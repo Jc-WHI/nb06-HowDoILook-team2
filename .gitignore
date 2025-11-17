@@ -154,5 +154,5 @@ frontend/frontend/node_modules
 # macOS
 .DS_Store
 
-# http
+# REST Client
 __http__/
