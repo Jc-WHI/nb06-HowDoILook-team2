@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import { PORT } from './src/lib/constants.js';
-import curateRouter from './src/routers/curateRouter.js';
-import { defaultNotFoundHandler, globalErrorHandler } from './src/controllers/errorController.js';
+import { PORT } from './lib/constants.js';
+import curateRouter from './routers/curateRouter.js';
+import { defaultNotFoundHandler, globalErrorHandler } from './controllers/errorController.js';
 
 const app = express();
 
