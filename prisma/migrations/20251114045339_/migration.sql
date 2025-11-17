@@ -28,7 +28,6 @@ CREATE TABLE "Image" (
 CREATE TABLE "Tag" (
     "id" SERIAL NOT NULL,
     "tags" TEXT NOT NULL,
-    "styleId" INTEGER,
 
     CONSTRAINT "Tag_pkey" PRIMARY KEY ("id")
 );
@@ -56,7 +55,7 @@ CREATE TABLE "Curating" (
     "practicality" INTEGER NOT NULL DEFAULT 0,
     "costEffectiveness" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "styleId" INTEGER,
+    "styleId" INTEGER NOT NULL,
 
     CONSTRAINT "Curating_pkey" PRIMARY KEY ("id")
 );
@@ -66,25 +65,43 @@ CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "curatingId" INTEGER,
+    "curatingId" INTEGER NOT NULL,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "_StyleTags" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Tag_tags_key" ON "Tag"("tags");
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Comment_curatingId_key" ON "Comment"("curatingId");
 
--- AddForeignKey
-ALTER TABLE "Image" ADD CONSTRAINT "Image_styleId_fkey" FOREIGN KEY ("styleId") REFERENCES "Style"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "_StyleTags_AB_unique" ON "_StyleTags"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_StyleTags_B_index" ON "_StyleTags"("B");
 
 -- AddForeignKey
-ALTER TABLE "Tag" ADD CONSTRAINT "Tag_styleId_fkey" FOREIGN KEY ("styleId") REFERENCES "Style"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Image" ADD CONSTRAINT "Image_styleId_fkey" FOREIGN KEY ("styleId") REFERENCES "Style"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Item" ADD CONSTRAINT "Item_styleId_fkey" FOREIGN KEY ("styleId") REFERENCES "Style"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Item" ADD CONSTRAINT "Item_styleId_fkey" FOREIGN KEY ("styleId") REFERENCES "Style"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Curating" ADD CONSTRAINT "Curating_styleId_fkey" FOREIGN KEY ("styleId") REFERENCES "Style"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Curating" ADD CONSTRAINT "Curating_styleId_fkey" FOREIGN KEY ("styleId") REFERENCES "Style"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_curatingId_fkey" FOREIGN KEY ("curatingId") REFERENCES "Curating"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_curatingId_fkey" FOREIGN KEY ("curatingId") REFERENCES "Curating"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_StyleTags" ADD CONSTRAINT "_StyleTags_A_fkey" FOREIGN KEY ("A") REFERENCES "Style"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_StyleTags" ADD CONSTRAINT "_StyleTags_B_fkey" FOREIGN KEY ("B") REFERENCES "Tag"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -73,7 +73,7 @@ model Curating {
   createdAt         DateTime @default(now())
   style             Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId           Int
-  comment           Comment?
+  Comment           Comment?
 }
 
 model Comment {
