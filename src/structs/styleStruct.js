@@ -2,7 +2,7 @@ import * as s from 'superstruct';
 
 // 상품 목록 갤러리
 // 재료 손질 Page
-const pageStruct = s.coerce(s.number(), s.string, (v) => {
+const pageStruct = s.coerce(s.number(), s.string(), (v) => {
   const n = Number(v);
   return Number.isNaN(n) || n < 1 ? 1 : n; // NaN이거나 1보다 작으면 1 반환
 });
@@ -23,8 +23,8 @@ const tagStruct = s.optional(s.size(s.string(), 1, 20));
 export const styleListGallaryQueryStruct = s.object({
   page: s.optional(pageStruct),
   pageSize: s.optional(pageSizeStruct),
-  sortBy: s.optional(sortByStruct),
-  searchBy: s.optional(searchByStruct),
-  keyword: s.optional(keywordStruct),
-  tag: s.optional(tagStruct),
+  sortBy: sortByStruct,
+  searchBy: searchByStruct,
+  keyword: keywordStruct,
+  tag: tagStruct,
 });
