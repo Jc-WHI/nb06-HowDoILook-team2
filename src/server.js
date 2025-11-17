@@ -3,7 +3,8 @@ import cors from 'cors';
 import { PORT } from './lib/constants.js';
 import commentRouter from './routers/comment.router.js';
 import styleRouter from './routers/styleRouter.js';
-import { defaultNotFoundHandler, globalErrorHandler } from '../src/controllers/errorController.js';
+import curateRouter from './routers/curateRouter.js';
+import { defaultNotFoundHandler, globalErrorHandler } from './controllers/errorController.js';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(cors());
 app.use('/', styleRouter);
 app.use('/curations', commentRouter);
 
+app.use(curateRouter);
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);
 
