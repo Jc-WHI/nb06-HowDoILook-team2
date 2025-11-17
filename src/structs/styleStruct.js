@@ -28,3 +28,16 @@ export const styleListGallaryQueryStruct = s.object({
   keyword: keywordStruct,
   tag: tagStruct,
 });
+
+// 상품 목록 랭크
+// 재료 손질 rankBy
+const rankByStruct = s.optional(
+  s.enums(['total', 'trendy', 'personality', 'practicality', 'costEffectiveness']),
+);
+
+// 상품 목록 랭크 완성
+export const styleListRankQueryStruct = s.object({
+  page: s.optional(pageStruct),
+  pageSize: s.optional(pageSizeStruct),
+  rankBy: rankByStruct,
+});
