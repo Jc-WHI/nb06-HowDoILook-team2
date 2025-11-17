@@ -4,6 +4,7 @@ import { BadRequestError } from '../lib/error.js';
 import { Prisma } from '@prisma/client';
 import { ForbiddenError } from '../lib/error.js';
 
+//존재하지 않는 api 요청에 대한 404, 라우터 중 매칭되는 경로가 하나도 없을 때 프론트에게 이 url이 없음을 명확히 알려주기 위해 필요함
 export function defaultNotFoundHandler(req, res, next) {
   return res.status(404).send({ message: '존재하지 않습니다' });
 }
