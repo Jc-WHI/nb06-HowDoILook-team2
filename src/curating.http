@@ -34,9 +34,9 @@ Content-Type: application/json
 }	
 
 ###
-GET http://localhost:3000/styles/1/curations?page=1&pageSize=4
+GET http://localhost:3000/styles/1/curations?page=1&pageSize=5
 
 
 ###
-GET http://localhost:3000/styles/1/curations?page=1&pageSize=5&searchBy=content&keyword=d
+GET http://localhost:3000/styles/1/curations?page=1&pageSize=5&searchBy=nickname&keyword=민수
 //키워드 검색 쿼리// ?page=1&pageSize=5&searchBy=nickname&keyword=민수

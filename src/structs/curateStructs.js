@@ -48,9 +48,12 @@ export const updateCurateStruct = s.object({
 
 export const deleteCurateStruct = s.object({ password: s.size(s.string(), 8, 16) });
 
+const Page = s.refine(Integer, 'Page', (value) => value <= 500);
+const PageSize = s.refine(Integer, 'PageSize', (value) => value <= 20);
+
 export const pageParamsStruct = s.object({
-  page: s.defaulted(Integer, 1),
-  pageSize: s.defaulted(Integer, 5),
+  page: s.defaulted(Page, 1),
+  pageSize: s.defaulted(PageSize, 5),
   searchBy: s.optional(s.enums(['nickname', 'content'])), //키워드 값을 주지 않아도 목록이 검색되게
   keyword: s.optional(s.string()),
 });
