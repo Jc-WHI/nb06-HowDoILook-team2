@@ -1,6 +1,6 @@
 import { prisma } from '../lib/prismaClient.js';
 import * as s from 'superstruct';
-import { styleListGallaryQueryStruct } from '../structs/styleStruct.js';
+import { styleListGallaryQueryStruct, styleListRankQueryStruct } from '../structs/styleStruct.js';
 
 // 스타일 갤러리 목록
 export async function styleListGallery(req, res, next) {
@@ -104,7 +104,11 @@ export async function styleListGallery(req, res, next) {
 
 // 스타일 랭킹 목록
 export async function styleListRank(req, res, next) {
-  const { page = 1, pageSize = 10, rankBy = 'total' } = req.query;
+  const {
+    page = 1,
+    pageSize = 10,
+    rankBy = 'total',
+  } = s.create(req.query, styleListRankQueryStruct);
 
   const skip = Number(page - 1) * Number(pageSize);
   const take = Number(pageSize);
