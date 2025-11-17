@@ -66,10 +66,6 @@ model Curating {
   nickname          String
   content           String
   password          String
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 3dbfab7 (🔧 fix(prisma): 스키마 재구성)
   trendy            Int      @default(0)
   personality       Int      @default(0)
   practicality      Int      @default(0)
@@ -77,21 +73,7 @@ model Curating {
   createdAt         DateTime @default(now())
   style             Style    @relation(fields: [styleId], references: [id], onDelete: Cascade)
   styleId           Int
-<<<<<<< HEAD
-  comment           Comment?
-=======
-  trendy            Int       @default(0)
-  personality       Int       @default(0)
-  practicality      Int       @default(0)
-  costEffectiveness Int       @default(0)
-  createdAt         DateTime  @default(now())
-  style             Style?    @relation(fields: [styleId], references: [id], onDelete: Cascade)
-  styleId           Int?
-  comment           Comment[]
->>>>>>> 0ffccde (🚀 feat(prisma): add seed.js mock.js 그리고 스키마 최신화)
-=======
   Comment           Comment?
->>>>>>> 3dbfab7 (🔧 fix(prisma): 스키마 재구성)
 }
 
 model Comment {
