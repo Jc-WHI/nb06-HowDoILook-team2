@@ -237,9 +237,6 @@
 
 
 
-import { prisma } from '../lib/prismaClient.js';
-import * as s from 'superstruct';
-import { styleIdStruct } from '../structs/styleStruct.js';
 
 // 스타일 상세 조회
 export async function styleGetId(req, res, next) {
