@@ -154,5 +154,5 @@ frontend/frontend/node_modules
 # macOS
 .DS_Store
 
-# Local test
-curating.http
+# http
+__http__
