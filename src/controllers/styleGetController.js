@@ -1,8 +1,17 @@
 import { prisma } from '../lib/prismaClient.js';
+import * as s from 'superstruct';
+import { styleListGallaryQueryStruct } from '../structs/styleStruct.js';
 
 // 스타일 갤러리 목록
 export async function styleListGallery(req, res, next) {
-  const { page = 1, pageSize = 10, sortBy = 'latest', searchBy, keyword, tag } = req.query;
+  const {
+    page = 1,
+    pageSize = 10,
+    sortBy = 'latest',
+    searchBy,
+    keyword,
+    tag,
+  } = s.create(req.query, styleListGallaryQueryStruct);
 
   const skip = Number(page - 1) * pageSize;
   const take = Number(pageSize);
