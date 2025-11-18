@@ -1,5 +1,48 @@
 import * as s from 'superstruct';
 
+const categoryStruct = s.enums(['top', 'bottom', 'outer', 'dress', 'shoes', 'bag', 'accessory']);
+
+const itemStruct = s.object({
+  name: s.size(s.nonempty(s.string()), 1, 20),
+  brand: s.size(s.nonempty(s.string()), 1, 20),
+  price: s.min(s.number(), 0),
+});
+
+const categoriesStruct = s.record(categoryStruct, itemStruct);
+
+// 상품 등록
+export const createStyleBodyStruct = s.object({
+  nickname: s.size(s.nonempty(s.string()), 1, 20),
+  title: s.coerce(s.size(s.nonempty(s.string()), 1, 20), s.string(), (v) => v.trim()),
+  content: s.size(s.nonempty(s.string()), 1, 500),
+  password: s.size(s.nonempty(s.string()), 8, 16),
+  categories: categoriesStruct,
+  tags: s.array(s.size(s.nonempty(s.string()), 1, 10)),
+  imageUrls: s.array(s.nonempty(s.string())),
+});
+
+// 상품 수정
+export const updateStyleBodyStruct = s.object({
+  nickname: s.size(s.nonempty(s.string()), 1, 20),
+  title: s.coerce(s.size(s.nonempty(s.string()), 1, 20), s.string(), (v) => v.trim()),
+  content: s.size(s.nonempty(s.string()), 1, 500),
+  password: s.size(s.nonempty(s.string()), 8, 16),
+  categories: categoriesStruct,
+  tags: s.optional(s.array(s.size(s.nonempty(s.string()), 1, 10))),
+  imageUrls: s.array(s.nonempty(s.string())),
+});
+
+// style id 검사
+const integer = s.refine(
+  s.coerce(s.number(), s.string(), (v) => Number(v)),
+  'positiveInteger',
+  (v) => Number.isInteger(v) && v >= 0,
+);
+
+export const styleIdStruct = s.object({
+  styleId: integer,
+});
+
 // 상품 목록 갤러리
 // 재료 손질 Page
 const pageStruct = s.coerce(s.number(), s.string(), (v) => {
@@ -39,5 +82,10 @@ const rankByStruct = s.optional(
 export const styleListRankQueryStruct = s.object({
   page: s.optional(pageStruct),
   pageSize: s.optional(pageSizeStruct),
-  rankBy: rankByStruct,
+  rankBy: s.optional(rankByStruct),
+});
+
+// 상품 제거
+export const styleDeleteStruct = s.object({
+  password: s.size(s.nonempty(s.string()), 8, 16),
 });
