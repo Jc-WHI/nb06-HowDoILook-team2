@@ -1,7 +1,12 @@
 import { prisma } from '../lib/prismaClient.js';
 import * as s from 'superstruct';
-import { curationIdStruct, createCommentStruct } from '../structs/commentStructs.js';
-import { NotFoundError, ForbiddenError } from '../lib/error.js';
+import {
+  curationIdStruct,
+  createCommentStruct,
+  deleteCommentStruct,
+  putCommentStruct,
+} from '../structs/commentStructs.js';
+import { BadRequestError, NotFoundError, ForbiddenError } from '../lib/error.js';
 
 //comment create =====
 const createComment = async (req, res, next) => {
@@ -31,7 +36,6 @@ const createComment = async (req, res, next) => {
   const replyData = await prisma.comment.create({
     data: {
       content,
-
       curatingId: curationId,
     },
   });
@@ -88,4 +92,41 @@ const updateComment = async (req, res, next) => {
   return res.status(200).json(responseData);
 };
 
-export { createComment, updateComment };
+// ========== DELETE comment ==========
+const deleteComment = async (req, res, next) => {
+  // commentId가 받은것은 문자열이므로 숫자로 변환 //이렇게 하면 여러번 parseInt로 바꾸지 않아도 됨
+  const { commentId } = s.mask(req.params, commentIdStruct);
+  const { password } = s.mask(req.body, deleteCommentStruct);
+
+  // commentId, password가 없을경우 return 400
+  if (!commentId || !password) {
+    return next(new BadRequestError());
+  }
+
+  //commetId에 연결된, curatingId 에서 연결된, commentIdData 가져오기
+  const commentIdData = await prisma.comment.findUniqueOrThrow({
+    where: { id: commentId },
+    include: { curating: { include: { style: true } } },
+  });
+
+  // comment, curating, style의 정보가 없을 시 return 404
+  if (!commentIdData || !commentIdData.curating || !commentIdData.curating.style) {
+    return next(new NotFoundError());
+  }
+
+  // commentIdData에서 style의 password 가져오기
+  const stylePassword = commentIdData.curating.style.password;
+
+  // password 가 일치하지 않을 시 return 403
+  if (password !== stylePassword) {
+    return next(new ForbiddenError());
+  }
+
+  // 여기까지 왔다면 삭제 진행 가능
+  await prisma.comment.delete({
+    where: { id: commentId },
+  });
+  return res.status(200).json({ message: '답글 삭제 성공' });
+};
+
+export { createComment, updateComment, deleteComment };
