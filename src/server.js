@@ -5,15 +5,21 @@ import commentRouter from './routers/comment.router.js';
 import styleRouter from './routers/styleRouter.js';
 import curateRouter from './routers/curateRouter.js';
 import { defaultNotFoundHandler, globalErrorHandler } from './controllers/errorController.js';
+import imageRouter from './routers/imageRouter.js';
+import tagsRouter from './routers/tagsRouter.js';
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
+app.use('/uploads', express.static('uploads'));
+
 app.use(styleRouter);
 app.use(commentRouter);
 app.use(curateRouter);
+app.use(imageRouter);
+app.use(tagsRouter);
 
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);
