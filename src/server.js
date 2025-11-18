@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { PORT } from './lib/constants.js';
-import commentRouter from './routers/comment.router.js';
+import commentRouter from './routers/commentRouter.js';
 import styleRouter from './routers/styleRouter.js';
 import curateRouter from './routers/curateRouter.js';
 import { defaultNotFoundHandler, globalErrorHandler } from './controllers/errorController.js';

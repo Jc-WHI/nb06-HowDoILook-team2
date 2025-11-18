@@ -1,9 +1,5 @@
 import express from 'express';
-import {
-  createComment,
-  updateComment,
-  deleteComment,
-} from './../controllers/comment.controller.js';
+import { createComment, updateComment, deleteComment } from './../controllers/commentController.js';
 import { withAsync } from '../lib/withAsync.js';
 
 const router = express.Router();
