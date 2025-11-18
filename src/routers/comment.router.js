@@ -9,4 +9,9 @@ router
   //post
   .post(withAsync(createComment));
 
+router
+  .route('/:commentId')
+  //PUT
+  .put(withAsync(updateComment));
+
 export default router;
