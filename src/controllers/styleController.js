@@ -1,6 +1,14 @@
 import { prisma } from '../lib/prismaClient.js';
 import * as s from 'superstruct';
-import { styleListGallaryQueryStruct, styleListRankQueryStruct } from '../structs/styleStruct.js';
+import {
+  createStyleBodyStruct,
+  styleDeleteStruct,
+  styleIdStruct,
+  styleListGallaryQueryStruct,
+  styleListRankQueryStruct,
+} from '../structs/styleStruct.js';
+import { Category } from '@prisma/client';
+import { BadRequestError, ForbiddenError, NotFoundError } from '../lib/error.js';
 
 // 스타일 갤러리 목록
 export async function styleListGallery(req, res, next) {
@@ -235,4 +243,74 @@ export async function styleListRank(req, res, next) {
     totalItemCount: totalItemCount,
     data: formattedData,
   });
+}
+
+// 스타일 등록
+export async function createStyle(req, res, next) {
+  const { nickname, title, content, password, categories, tags, imageUrls } = s.create(
+    req.body,
+    createStyleBodyStruct,
+  ); //필요한 변수들은 request body로 부터, 구조분해 할당을 통해 선언 및 할당을 한다.
+
+  //nickname, title, content, password || categories || tag, imageUrl 세가지는 다르게 처리를 해야함
+  // 따라서 트랜잭션 처리를 통해 db와 상호작용해야 한다.
+  const result = await prisma.$transaction(async (tx) => {
+    const style = await tx.style.create({
+      data: { nickname, title, content, password },
+    });
+
+    for (const [catKey, value] of Object.entries(categories)) {
+      if (!Object.values(Category).includes(catKey)) continue;
+      await tx.item.create({
+        data: {
+          name: value.name,
+          brand: value.brand,
+          price: value.price,
+          categories: catKey,
+          styleId: style.id,
+        },
+      });
+    }
+
+    //tags는 배열이어야 하며(문자열 배열), 비어있지 말아야 한다
+    for (const tagName of tags) {
+      const tag = await tx.tag.upsert({
+        where: { tags: tagName },
+        update: {},
+        create: { tags: tagName },
+      });
+      await tx.style.update({
+        where: { id: style.id },
+        data: { tag: { connect: { id: tag.id } } },
+      });
+    }
+
+    // imgUrls는 배열이어야 하며 (문자열 배열), 비어있지 말아야 한다
+    await tx.image.createMany({
+      data: imageUrls.map((url) => ({ styleId: style.id, imageUrls: url })),
+    });
+
+    return tx.style.findUnique({
+      where: { id: style.id },
+      include: { tag: true, image: true, item: true },
+    });
+  });
+
+  res.status(201).json(result);
+}
+
+// 스타일 삭제 - 스타일  id 필요
+export async function deleteStyle(req, res, next) {
+  s.assert(req.params, styleIdStruct);
+  const { password } = s.create(req.body, styleDeleteStruct);
+  const styleId = parseInt(req.params.styleId);
+
+  const style = await prisma.style.findUniqueOrThrow({ where: { id: styleId } });
+
+  if (!password) return next(new BadRequestError());
+  if (style.password !== password) return next(new ForbiddenError());
+
+  await prisma.style.delete({ where: { id: styleId } });
+
+  res.status(200).json({ message: '스타일 삭제 성공' });
 }
