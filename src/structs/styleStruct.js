@@ -80,9 +80,9 @@ const rankByStruct = s.optional(
 
 // 상품 목록 랭크 완성
 export const styleListRankQueryStruct = s.object({
-  page: pageStruct,
-  pageSize: pageSizeStruct,
-  rankBy: rankByStruct,
+  page: s.optional(pageStruct),
+  pageSize: s.optional(pageSizeStruct),
+  rankBy: s.optional(rankByStruct),
 });
 
 // 상품 제거

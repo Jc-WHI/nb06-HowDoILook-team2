@@ -9,17 +9,17 @@ import { withAsync } from '../lib/withAsync.js';
 const router = express.Router();
 
 router
-  .route('/:curationId/comments')
+  .route('/curations/:curationId/comments')
   //post
   .post(withAsync(createComment));
 
 router
-  .route('/:commentId')
+  .route('/comments/:commentId')
   //PUT
   .put(withAsync(updateComment));
 
 router
-  .route('/:commentId')
+  .route('/comments/:commentId')
   //delete
   .delete(withAsync(deleteComment));
 
