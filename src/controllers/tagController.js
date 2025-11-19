@@ -19,5 +19,7 @@ export const getPopularTags = async (req, res, next) => {
     take: 7,
   });
 
-  res.status(200).json({ tags: popularTags.map((tag) => tag.tags) });
+  res
+    .status(200)
+    .json({ tags: popularTags.filter((tag) => tag._count.style >= 2).map((tag) => tag.tags) });
 };
