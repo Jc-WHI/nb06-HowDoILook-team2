@@ -21,7 +21,7 @@ export const mockStyles = [
       {
         nickname: '패션평론가',
         content: '따뜻한 색감이 정말 가을에 잘 어울려요 🍂',
-        password: '1111',
+        password: '12341234',
         trendy: 4,
         personality: 5,
         practicality: 4,
@@ -30,7 +30,7 @@ export const mockStyles = [
       {
         nickname: '감성러',
         content: '컬러 조합이 너무 부드럽네요 ☕',
-        password: '2222',
+        password: '12341234',
         trendy: 3,
         personality: 5,
         practicality: 4,
@@ -42,7 +42,7 @@ export const mockStyles = [
     nickname: '스트릿소년',
     title: '스트릿 감성 룩 😎',
     content: '오버핏 후드랑 조거팬츠로 꾸안꾸!',
-    password: 'abcd1234',
+    password: '12341234',
     categories: {
       top: { name: '후드티', brand: 'Nike', price: 69000 },
       bottom: { name: '조거 팬츠', brand: 'Adidas', price: 59000 },
@@ -60,7 +60,7 @@ export const mockStyles = [
       {
         nickname: '트렌드헌터',
         content: '스트릿 무드 완벽 😎',
-        password: '3333',
+        password: '12341234',
         trendy: 5,
         personality: 4,
         practicality: 5,
