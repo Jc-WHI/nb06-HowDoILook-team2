@@ -59,8 +59,8 @@ const pageSizeStruct = s.coerce(s.number(), s.string(), (v) => {
 // 재료 손질 sortBy, searchBy, keyword, tag
 const sortByStruct = s.optional(s.enums(['latest', 'mostViewed', 'mostCurated']));
 const searchByStruct = s.optional(s.enums(['nickname', 'title', 'content', 'tag']));
-const keywordStruct = s.optional(s.size(s.string(), 1, 50));
-const tagStruct = s.optional(s.size(s.string(), 1, 20));
+const keywordStruct = s.optional(s.size(s.string(), 0, 50));
+const tagStruct = s.optional(s.size(s.string(), 0, 20));
 
 // 상품 목록 갤러리 완성
 export const styleListGallaryQueryStruct = s.object({
