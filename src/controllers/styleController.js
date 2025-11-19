@@ -326,12 +326,35 @@ export async function deleteStyle(req, res, next) {
   const { password } = s.create(req.body, styleDeleteStruct);
   const { styleId } = s.create(req.params, styleIdStruct);
 
-  const style = await prisma.style.findUniqueOrThrow({ where: { id: styleId } });
-
   if (!password) return next(new BadRequestError());
+
+  const style = await prisma.style.findUniqueOrThrow({
+    where: { id: styleId },
+    include: { tag: true },
+  });
+
   if (style.password !== password) return next(new ForbiddenError());
 
-  await prisma.style.delete({ where: { id: styleId } });
+  await prisma.$transaction(async (tx) => {
+    for (const t of style.tag) {
+      const tagWithCount = await tx.tag.findUniqueOrThrow({
+        where: { id: t.id },
+        include: { _count: { select: { style: true } } },
+      });
+
+      await tx.style.update({
+        where: { id: styleId },
+        data: { tag: { disconnect: { id: t.id } } },
+      });
+
+      if (tagWithCount._count.style <= 1) {
+        await tx.tag.delete({
+          where: { id: t.id },
+        });
+      }
+    }
+    await tx.style.delete({ where: { id: styleId } });
+  });
 
   res.status(200).json({ message: '스타일 삭제 성공' });
 }
