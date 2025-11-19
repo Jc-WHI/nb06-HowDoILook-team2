@@ -27,7 +27,7 @@ export async function styleListGallery(req, res, next) {
 
   let orderBy = { createdAt: 'desc' };
   if (sortBy === 'mostViewed') orderBy = { viewCount: 'desc' };
-  if (sortBy === 'mostCurated') orderBy = { _count: { curating: 'desc' } };
+  if (sortBy === 'mostCurated') orderBy = { curating: { _count: 'desc' } };
 
   let where = {};
   if (searchBy && keyword) {
