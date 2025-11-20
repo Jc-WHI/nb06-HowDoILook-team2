@@ -124,8 +124,6 @@ export async function styleListRank(req, res, next) {
 
   const data = await prisma.style.findMany({
     where: { curating: { some: {} } },
-    skip,
-    take,
     select: {
       id: true,
       nickname: true,
@@ -238,11 +236,13 @@ export async function styleListRank(req, res, next) {
     };
   });
 
+  const paginatedData = formattedData.slice(skip, skip + take);
+
   res.status(200).json({
     currentPage: page,
     totalPages: totalPages,
     totalItemCount: totalItemCount,
-    data: formattedData,
+    data: paginatedData,
   });
 }
 
